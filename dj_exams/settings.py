@@ -16,8 +16,8 @@ import sys
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 VIRTUALENV_DIR = os.path.dirname(PROJECT_DIR)
-MY_APPS_DIR = os.path.join(VIRTUALENV_DIR, 'my_apps')
-sys.path.append(MY_APPS_DIR)
+APPS_DIR = os.path.join(VIRTUALENV_DIR, 'apps')
+sys.path.append(APPS_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'exams',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -112,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'fr-fr'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -131,5 +132,5 @@ STATIC_URL = '/static/'
 # Local settings
 try:
     from dj_exams.local_settings import *
-else:
+except:
     pass
