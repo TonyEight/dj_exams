@@ -1,5 +1,5 @@
 from django.contrib import admin
-from exams.models import Question, Answer, Exam, ExamContext
+from exams.models import Question, Answer, Exam, ExamContext, Subject
 
 
 class ExamContextInlines(admin.TabularInline):
@@ -9,11 +9,8 @@ class ExamContextInlines(admin.TabularInline):
 
 class ExamAdmin(admin.ModelAdmin):
     inlines = [ExamContextInlines,]
-    list_display = ['name', 'global_scale', 'scale',]
-
-
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = ['question', 'label',]
+    list_display = ['subject', 'name', 'strict', 'global_scale', 'scale',]
+    list_display_links = ['name',]
 
 
 class AnswerInlines(admin.TabularInline):
@@ -26,5 +23,5 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Answer, AnswerAdmin)
 admin.site.register(Exam, ExamAdmin)
+admin.site.register(Subject)

@@ -2,10 +2,47 @@ from django.db import models
 
 
 class Question(models.Model):
+    LANGUAGES = (
+        ('python', 'Python'),
+        ('html', 'HTML'),
+        ('css', 'CSS'),
+        ('javascript', 'JavaScript'),
+    )
     label = models.CharField(verbose_name='label', max_length=700)
+    snippet = models.TextField(verbose_name='snippet', null=True)
+    snippet_language = models.CharField(
+        verbose_name='snippet language',
+        max_length=200,
+        choices=LANGUAGES,
+        null=True
+    )
 
     def __str__(self):
         return self.label
+
+    def save(self, *args, **kwargs):
+        self.snippet = self.snippet.strip()
+        super(Question, self).save(*args, **kwargs)
+
+    @property
+    def correct_answers(self):
+        return self._count_correct_answers()
+
+    @property
+    def list_correct_answers(self):
+        return self._list_correct_answers()
+
+    def _list_correct_answers(self):
+        return [answer for answer in self.possible_answers.all()\
+                if answer.is_correct]
+    
+
+    def _count_correct_answers(self):
+        count = 0
+        for answer in self.possible_answers.all():
+            if answer.is_correct:
+                count += 1
+        return count
 
 
 class Answer(models.Model):
@@ -15,14 +52,34 @@ class Answer(models.Model):
         related_name='possible_answers'
     )
     label = models.CharField(verbose_name='label', max_length=700)
-    is_correct = models.BooleanField(verbose_name='correct answer', default=0)
+    is_correct = models.BooleanField(verbose_name='correct answer', default=1)
 
     def __str__(self):
         return self.label
 
 
+class Subject(models.Model):
+    label = models.CharField(verbose_name='label', max_length=700)
+
+    def __str__(self):
+        return self.label
+
+    def save(self, *args, **kwargs):
+        self.label = self.label.upper()
+        super(Subject, self).save(*args, **kwargs)
+
+
 class Exam(models.Model):
+    subject = models.ForeignKey(
+        Subject,
+        verbose_name='subject',
+        related_name='exams',
+        null=True
+    )
+    is_published = models.BooleanField(verbose_name='is published', default=1)
     name = models.CharField(verbose_name='name', max_length=700)
+    description = models.TextField(verbose_name='description')
+    strict = models.BooleanField(verbose_name='stricted corretion', default=1)
     questions = models.ManyToManyField(
         Question,
         verbose_name='questions',

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block extra-title %}Home | {% endblock %}
+
+{% block content %}
+<div class="row">
+	<h3>Available exams</h3>
+{% for exam in exams %}
+	<div class="col s12 m6">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title blue-text"><i class="material-icons">class</i><strong>{{ exam.name }}</strong></span>
+				<p>Subject : {{ exam.subject }}</p>
+				<p><em>{{ exam.description }}</em></p>
+			</div>
+			<div class="card-action blue darken-1">
+				<a href="{% url 'exam-completion' exam.pk %}" class="white-text"><i class="material-icons">assignment</i> Go for it!</a>
+			</div>
+		</div>
+	</div>
+	{% if forloop.counter|divisibleby:2 %}
+</div>
+<div class="row">
+	{% endif %}
+{% empty %}
+	<p>No available exams.</p>
+{% endfor %}
+</div>
+{% endblock %}

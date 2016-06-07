@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block hide-for-pdf %}{% endblock %}
+
+{% block extra-title %}Review : {{ submission }} | {% endblock %}
+
+{% block extra-css %}
+.checkbox-good[type="checkbox"].filled-in:checked + label:after{
+     border: 2px solid #4caf50;
+     background-color: #4caf50;
+}
+.checkbox-bad[type="checkbox"].filled-in:checked + label:after{
+     border: 2px solid #b71c1c;
+     background-color: #b71c1c;
+}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<h3>Details</h3>
+	<p>Student : {{ submission.student }}</p>
+	<p>Submitted : {{ submission.submitted_at }} ({{ submission.submitted_at|naturaltime }})</p>
+	<h3>Exam</h3>
+	<p><strong>{{ submission.exam.subject }}</strong></p>
+	<p><strong>{{ submission.exam.name }}</strong></p>
+	<p><em>{{ submission.exam.description }}</em></p>
+	<h3>Result</h3>
+	<h5>Global score : {{ submission.result }} <strong>/ {{ submission.exam.global_scale }}</strong></h5>
+	<h3>Marking</h3>
+	{% for question in results_per_question %}
+	<div class="row">
+		<div class="input-field col s12">
+			<p><strong>{{ forloop.counter }}. {{ question.0.label }}</strong></p>
+			<p class="{% if question.1 == question.2 %}green-text{% else %}red-text{% endif %}"><strong>Your score : {{ question.1 }} / {{ question.2 }}</strong></p>
+			{% if question.0.snippet %}
+			<pre><code class="{{ question.0.snippet_language }}">{{ question.0.snippet }}</code></pre>
+			{% endif %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="input-field col s12">
+			<h5>Good answers</h5>
+			{% for answer in question.0.list_correct_answers %}
+			<p>
+				{{ answer.label }}
+			</p>
+			{% endfor %}
+			<h5>Your answers</h5>
+			{% for answer in question.0.possible_answers.all %}
+			<p>
+				{% if answer in submission.replies.all %}{{ answer.label }}{% endif %}
+			</p>
+			{% endfor %}
+		</div>
+	</div>
+	{% endfor %}
+{% endblock %}
