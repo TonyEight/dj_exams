@@ -9,12 +9,13 @@ class Question(models.Model):
         ('javascript', 'JavaScript'),
     )
     label = models.CharField(verbose_name='label', max_length=700)
-    snippet = models.TextField(verbose_name='snippet', null=True)
+    snippet = models.TextField(verbose_name='snippet', null=True, blank=True)
     snippet_language = models.CharField(
         verbose_name='snippet language',
         max_length=200,
         choices=LANGUAGES,
-        null=True
+        null=True,
+        blank=True
     )
 
     def __str__(self):
@@ -74,7 +75,7 @@ class Exam(models.Model):
         Subject,
         verbose_name='subject',
         related_name='exams',
-        null=True
+        default=Subject.objects.all()[0].pk
     )
     is_published = models.BooleanField(verbose_name='is published', default=1)
     name = models.CharField(verbose_name='name', max_length=700)
