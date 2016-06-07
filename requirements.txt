@@ -2,3 +2,4 @@ Django
 mysqlclient
 django-easy-pdf
 git+https://github.com/chrisglass/xhtml2pdf.git
+gunicorn
