@@ -112,7 +112,8 @@ class SubmissionReView(HeaderContextMixin, DetailView):
                 )
             )
         context.update({
-            'results_per_question': results
+            'results_per_question': results,
+            'normalized_scale': self.object.result * self.object.exam.scale
         })
         return context
 
@@ -136,6 +137,7 @@ class SubmissionPDFView(PDFTemplateView):
             )
         context.update({
             'submission': submission,
-            'results_per_question': results
+            'results_per_question': results,
+            'normalized_scale': submission.result * submission.exam.scale
         })
         return context

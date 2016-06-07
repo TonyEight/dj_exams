@@ -25,7 +25,8 @@
 	<p><strong>{{ submission.exam.name }}</strong></p>
 	<p><em>{{ submission.exam.description }}</em></p>
 	<h3>Result</h3>
-	<h5>{{ submission.result }} <strong>/ {{ submission.exam.global_scale }}</strong></h5>
+	<h5><strong>{{ normalized_scale|floatformat:"0" }} / 20 </strong></h5>
+	<p>Your direct score was : {{ submission.result }} / {{ submission.exam.global_scale }}</p>
 	<h3>Marking</h3>
 	{% for question in results_per_question %}
 	<div class="row">
